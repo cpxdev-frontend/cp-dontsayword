@@ -31,24 +31,11 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRo
 
     React.useEffect(() => {
         setScreen([window.innerWidth, window.innerHeight])
-        // var elem = document.getElementById("root");
-        // if (screen[0] > screen[1]) {
-        //     if (elem.requestFullscreen) {
-        //         elem.requestFullscreen();
-        //       } else if (elem.webkitRequestFullscreen) { /* Safari */
-        //       elem.webkitRequestFullscreen();
-        //       } else if (elem.msRequestFullscreen) { /* IE11 */
-        //       elem.msRequestFullscreen();
-        //       }
-        // } else {
-        //     if (document.exitFullscreen) {
-        //         document.exitFullscreen();
-        //       } else if (document.webkitExitFullscreen) { /* Safari */
-        //         document.webkitExitFullscreen();
-        //       } else if (document.msExitFullscreen) { /* IE11 */
-        //         document.msExitFullscreen();
-        //       }
-        // }
+        if (screen[0] > screen[1]) {
+            window.scrollTo(0, 1); // values are x,y-offset
+        } else {
+            window.scrollTo(0, 0); // values are x,y-offset
+        }
     }, [screen])
 
     const start = () => { 
