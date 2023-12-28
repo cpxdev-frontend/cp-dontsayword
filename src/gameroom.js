@@ -71,8 +71,8 @@ console.log(new Date())
         } else {
             setSecondsLeft(secondsLeft - 1);
             if (time == secondsLeft && startstate == true) {
-                shake = new Shake();
-                shake.start();
+                // shake = new Shake();
+                // shake.start();
             }
             if (secondsLeft === 0) {
                 if (startstate == false) {
@@ -146,12 +146,12 @@ console.log(new Date())
             )
         }
         {startstate == true && prewoningame == false && secondsLeft < (90 / 100) * time && (
-              <div class="btn-group mt-4" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
+              <div class="btn-group mt-4" role="group" aria-label="Basic example">
               <button type="button" class="btn btn-success" onClick={() => {
                 setPrewon(true)
                 setHold(5000000000000);
               }}>คลิกเมื่อคุณชนะ (คุณเป็นผู้เล่นที่เหลือคนสุดท้ายในรอบนี้)</button>
-              <button type="button" class="btn btn-danger" onClick={() => {
+              <button type="button" class="btn btn-danger" hidden={screen[0] > screen[1]} onClick={() => {
                  setStart(null)
                  setHold(5000000000000);
                  setLose(1)
