@@ -76,12 +76,12 @@ console.log(new Date())
             }
             if (secondsLeft === 0) {
                 if (startstate == false) {
-                    navigator.vibrate([10,10]);
+                    navigator.vibrate([10,10, 10]);
                     setSecondsLeft(time)
                     setStart(true)
                     start()
                 } else {
-                    navigator.vibrate(80);
+                    navigator.vibrate(600);
                     setStart(null)
                     setWon(true)
                     setHold(5000000000000);
