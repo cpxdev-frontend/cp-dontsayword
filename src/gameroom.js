@@ -1,7 +1,8 @@
 import React from 'react'
 import Shake from 'shake.js'
 
-var startsess;
+var ready;
+var shake;
 
 const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRound}) => {
     const [secondsLeft, setSecondsLeft] = React.useState(500);
@@ -32,17 +33,8 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRo
         setScreen([window.innerWidth, window.innerHeight])
     }, [screen])
 
-    window.addEventListener('shake', shakeEventDidOccur, false);
-
-    function shakeEventDidOccur () {
-        startsess.stop();
-        setPrewon(true)
-        setScore(2)
-        setHold(5000000000000);
-    }
-
     const start = () => { 
-        console.log(new Date())
+console.log(new Date())
     }
     const changegamewon = () => {
         setPrank(prankcurrent)
@@ -62,19 +54,28 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRo
         }
     }
 
+    window.addEventListener('shake', shakeEventDidOccur, false);
+
+    function shakeEventDidOccur () {
+        window.removeEventListener('shake', shakeEventDidOccur, false);
+        setPrewon(true)
+        setScore(2)
+        setHold(5000000000000);
+    }
+
   React.useEffect(() => {
-    setInterval(() => {
-        if (startstate == true && secondsLeft > 0) {
-            startsess = new Shake({
-                threshold: 800, // optional shake strength threshold
-                timeout: 2000 // optional, determines the frequency of event generation
-            });
-            startsess.start();
-        }
+    ready = setInterval(() => {
         if (secondsLeft == 500) {
             setSecondsLeft(500)
         } else {
             setSecondsLeft(secondsLeft - 1);
+            if (time == secondsLeft && startstate == true) {
+                shake = new Shake({
+                    threshold: 15, // optional shake strength threshold
+                    timeout: 1000 // optional, determines the frequency of event generation
+                });
+                shake.start();
+            }
             if (secondsLeft === 0) {
                 if (startstate == false) {
                     setSecondsLeft(time)
@@ -88,6 +89,8 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRo
             }
         }
     }, readyhold);
+
+    return () => clearInterval(ready);
   }, [secondsLeft]);
 
   const colorprogress = () => {
@@ -133,7 +136,6 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRo
               <div class="btn-group mt-4" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
               <button type="button" class="btn btn-success" onClick={() => {
                 setPrewon(true)
-                setScore(2)
                 setHold(5000000000000);
               }}>คลิกเมื่อคุณชนะ (คุณเป็นผู้เล่นที่เหลือคนสุดท้ายในรอบนี้)</button>
               <button type="button" class="btn btn-danger" onClick={() => {
