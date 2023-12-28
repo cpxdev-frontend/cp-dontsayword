@@ -71,10 +71,7 @@ console.log(new Date())
         } else {
             setSecondsLeft(secondsLeft - 1);
             if (time == secondsLeft && startstate == true) {
-                shake = new Shake({
-                    threshold: 15, // optional shake strength threshold
-                    timeout: 300 // optional, determines the frequency of event generation
-                });
+                shake = new Shake();
                 shake.start();
             }
             if (secondsLeft === 0) {
