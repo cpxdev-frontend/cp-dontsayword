@@ -72,8 +72,8 @@ console.log(new Date())
             setSecondsLeft(secondsLeft - 1);
             if (secondsLeft === 0) {
                 if (startstate == false) {
-                    shake = new Shake();
-                    shake.start();
+                    // shake = new Shake();
+                    // shake.start();
                     navigator.vibrate([10,10, 10]);
                     setSecondsLeft(time)
                     setStart(true)
@@ -149,7 +149,7 @@ console.log(new Date())
                 setPrewon(true)
                 setHold(5000000000000);
               }}>คลิกเมื่อคุณชนะ (คุณเป็นผู้เล่นที่เหลือคนสุดท้ายในรอบนี้)</button>
-              <button type="button" class="btn btn-danger" hidden={screen[0] > screen[1]} onClick={() => {
+              <button type="button" class={"btn btn-danger" + (screen[0] > screen[1] ? ' d-none' : '')}onClick={() => {
                  setStart(null)
                  setHold(5000000000000);
                  setLose(1)
