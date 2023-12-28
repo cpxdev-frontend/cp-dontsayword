@@ -57,7 +57,7 @@ console.log(new Date())
     window.addEventListener('shake', shakeEventDidOccur, false);
 
     function shakeEventDidOccur () {
-        navigator.vibrate(100);
+        navigator.vibrate(80);
         window.removeEventListener('shake', shakeEventDidOccur, false);
         setPrewon(true)
         setScore(2)
@@ -73,18 +73,18 @@ console.log(new Date())
             if (time == secondsLeft && startstate == true) {
                 shake = new Shake({
                     threshold: 15, // optional shake strength threshold
-                    timeout: 1000 // optional, determines the frequency of event generation
+                    timeout: 300 // optional, determines the frequency of event generation
                 });
                 shake.start();
             }
             if (secondsLeft === 0) {
                 if (startstate == false) {
-                    navigator.vibrate([80,80]);
+                    navigator.vibrate([10,10]);
                     setSecondsLeft(time)
                     setStart(true)
                     start()
                 } else {
-                    navigator.vibrate(100);
+                    navigator.vibrate(80);
                     setStart(null)
                     setWon(true)
                     setHold(5000000000000);
@@ -127,25 +127,27 @@ console.log(new Date())
                 <p>หากในรอบนี้เหลือผู้เล่นคนนี้คนเดียว ให้กดปุ่ม "คลิกเมื่อคุณชนะ" หรือให้คนที่ถือจอนี้อยู่เขย่ามือถือเพื่อหยุดเวลาและทายคำที่อยู่ด้านบนเพื่อรับคะแนนพิเศษ (หากทายถูกได้ 2 คะแนน ทายผิดจะได้รับ 1 คะแนน)</p>
             )
         }
-        {
-            prewoningame ==false ? (
-        <div class="progress mb-3"style={{height: '3px'}}>
+         <div class="progress mb-3"style={{height: '3px'}}>
           <div class={"progress-bar " + colorprogress()} role="progressbar" style={{width: ((secondsLeft / (startstate == true ? time : 5)) * 100) +'%'}}></div>
         </div>
-            ) : (
-                <p>ผู้เล่นคนนี้หยุดเวลาแล้ว! หากผู้เล่นคนนี้ทายคำด้านบนได้ จะได้ 2 คะแนน ทายผิดได้ 1 คะแนน</p>
-            )
-        }
         {
             startstate == false && secondsLeft > 5 && (
                 <button type="button" disabled={word == ''} onClick={()=>setSecondsLeft(5)} className="btn btn-lg btn-success">เริ่มเกมรอบที่ {round}</button>
             )
         }
+        {
+            prewoningame ==false ? (
+       <>
         {startstate == false && secondsLeft > 5 ? (
             <></>
         ) : (
             <h4 style={{color: startstate && secondsLeft <= (20 / 100) * time ? 'red' : ''}}>{startstate == true ? 'เหลือเวลาอีก' : 'เกมจะเริ่มใน'} {secondsLeft} วินาที {startstate == false && '(คำจะปรากฎด้านบน)'}</h4>
         )}
+       </>
+            ) : (
+                <p className='text-info'>ผู้เล่นคนนี้หยุดเวลาแล้ว! หากผู้เล่นคนนี้ทายคำด้านบนได้ จะได้ 2 คะแนน ทายผิดได้ 1 คะแนน</p>
+            )
+        }
         {startstate == true && prewoningame == false && secondsLeft < (90 / 100) * time && (
               <div class="btn-group mt-4" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
               <button type="button" class="btn btn-success" onClick={() => {
