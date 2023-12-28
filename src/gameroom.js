@@ -119,6 +119,11 @@ console.log(new Date())
     {startstate != null ? (
       <div classname="card-body d-flex justify-content-center">
         <h2 classname="card-title">{startstate ? 'คำที่ได้: ' + word : 'กดเพื่อเริ่มเกม'}</h2>
+        {
+            startstate && (
+                <p>หากในรอบนี้เหลือผู้เล่นคนนี้คนเดียว ให้กดปุ่ม "คลิกเมื่อคุณชนะ" หรือให้คนที่ถือจอนี้อยู่เขย่ามือถือเพื่อหยุดเวลาและทายคำที่อยู่ด้านบนเพื่อรับคะแนนพิเศษ (หากทายถูกได้ 2 คะแนน ทายผิดจะได้รับ 1 คะแนน)</p>
+            )
+        }
         <div class="progress mb-3"style={{height: '3px'}}>
           <div class={"progress-bar " + colorprogress()} role="progressbar" style={{width: ((secondsLeft / (startstate == true ? time : 5)) * 100) +'%'}}></div>
         </div>
@@ -172,7 +177,7 @@ console.log(new Date())
             <div classname="card-body d-flex justify-content-center">
             <h2 classname="card-title">{'คำที่ได้: ' + word}</h2>
             <hr />
-            <h4>It's your chance! หมดเวลาในรอบนี้แล้ว ผู้เล่นที่ถือจอนี้อยู่ต้องทายคำด้านบนนี้ให้ได้ ถึงจะได้คะแนน</h4>
+            <h4>It's your chance! หมดเวลาในรอบนี้แล้ว ผู้เล่นที่ถือจอนี้อยู่ต้องทายคำด้านบนนี้ให้ได้ (หากทายถูกได้ 2 คะแนน ทายผิดจะได้รับ 1 คะแนน)</h4>
             <div class="form-group" hidden={screen[0] > screen[1]}>
                 <label for="exampleInputEmail1">กรอกคะแนนที่คุณได้ในรอบนี้ (ระบุจำนวนเพื่อนที่คุณแกงให้แพ้เกมในรอบนี้สำเร็จเท่านั้น)</label>
                 <input type="number" class="form-control" onKeyUp={(e) => setPrankCurrent(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 0)} defaultValue={prankcurrent} />
@@ -191,8 +196,8 @@ console.log(new Date())
           </div>
         ) : (
             <div classname="card-body d-flex justify-content-center">
-                <h2 classname="card-title">คุณแพ้เกมในรอบนี้</h2>
-                <p class="card-text">ระหว่างนี้คุณสามารถหลอกล่อหรือแกงเพื่อนให้แพ้ได้ โดยสามารถกรอกจำนวนผู้ที่เราทำให้แพ้ได้ (สามารถแก้ไขได้เรื่อยๆจนกว่าจะมีผู้ชนะคนเดียวหรือจบเกม แต่ห้ามกดยืนยันการเล่นรอบถัดไปจนกว่าจะจบรอบเกมนั้นๆ การกดยืนยันเปลี่ยนรอบระบบจะบันทึกคะแนนที่ได้ในรอบนั้นๆ)</p>
+                <h2 classname="card-title">คุณแพ้เกมในรอบนี้ (คุณไม่ได้รับคะแนนในคำนี้)</h2>
+                <p class="card-text">ระหว่างนี้คุณสามารถหลอกล่อหรือแกงเพื่อนให้แพ้ได้ หากผู้ล่นตรงข้ามคนใดแพ้โดยคุณเท่ากับ 1 คะแนน โดยสามารถกรอกจำนวนผู้เล่นที่เราทำให้แพ้ได้ (สามารถแก้ไขได้เรื่อยๆจนกว่าจะมีผู้ชนะคนเดียวหรือจบเกม แต่ห้ามกดยืนยันการเล่นรอบถัดไปจนกว่าจะจบรอบเกมนั้นๆ การกดยืนยันเปลี่ยนรอบระบบจะบันทึกคะแนนที่ได้ในรอบนั้นๆ)</p>
                 <h4>คำที่คุณได้: {word}</h4>
                 <hr hidden={screen[0] > screen[1]} />
                 <div class="form-group" hidden={screen[0] > screen[1]}>
