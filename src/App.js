@@ -54,7 +54,12 @@ if (step == null) {
           <li class="list-group-item">คุณแพ้ไปแล้ว {lose} รอบ</li>
           <li class="list-group-item bg-success text-light h5">คะแนนที่คุณทำได้ {(won * 2) + prank} คะแนน</li>
         </ul>
-        <button type="button" onClick={() => setStep(0)} class="mt-3 btn btn-outline-info">เริ่มเกมใหม่</button>
+        <button type="button" onClick={() => {
+          setStep(0)
+          setWon(0)
+          setPrank(0)
+          setLose(0)
+        }} class="mt-3 btn btn-outline-info">เริ่มเกมใหม่</button>
       </div>
   </div>
     </div>

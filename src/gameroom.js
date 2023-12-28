@@ -4,6 +4,7 @@ var ready;
 
 const Game = ({round, setRound, setWin, setLose, setPrank, maxRound}) => {
     const [secondsLeft, setSecondsLeft] = React.useState(500);
+    const [prewoningame, setPrewon] = React.useState(false);
     const [word, setWord] = React.useState('');
     const [startstate, setStart] = React.useState(false);
     const [screen, setScreen] = React.useState([window.innerWidth, window.innerHeight]);
@@ -109,15 +110,30 @@ console.log(new Date())
         ) : (
             <h4 style={{color: startstate && secondsLeft <= 20 ? 'red' : ''}}>{startstate == true ? 'เหลือเวลาอีก' : 'เกมจะเริ่มใน'} {secondsLeft} วินาที {startstate == false && '(คำจะปรากฎด้านบน)'}</h4>
         )}
-        {startstate == true && secondsLeft < 295 && (
+        {startstate == true && prewoningame == false && secondsLeft < 295 && (
               <div class="btn-group" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
-              <button type="button" class="btn btn-success" onClick={() => changegamewon()}>คลิกเมื่อคุณชนะ (คุณเป็นผู้เล่นที่เหลือคนสุดท้ายในรอบนี้)</button>
+              <button type="button" class="btn btn-success" onClick={() => {
+                setPrewon(true)
+                setHold(5000000000000);
+              }}>คลิกเมื่อคุณชนะ (คุณเป็นผู้เล่นที่เหลือคนสุดท้ายในรอบนี้)</button>
               <button type="button" class="btn btn-danger" onClick={() => {
                  setStart(null)
                  setHold(5000000000000);
                  setLose(1)
               }}>คลิกเมื่อคุณแพ้</button>
           </div>
+        )}
+        {prewoningame && (
+            <>
+            <hr />
+              <div class="form-group" hidden={screen[0] > screen[1]}>
+                <label for="exampleInputEmail1">กรอกคะแนนที่คุณได้ในรอบนี้ (ระบุจำนวนเพื่อนที่คุณแกงให้แพ้เกมในรอบนี้สำเร็จเท่านั้น)</label>
+                <input type="number" class="form-control" onKeyUp={(e) => setPrankCurrent(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 0)} defaultValue={prankcurrent} />
+            </div>
+            <div class="btn-group" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
+                <button type="button" class="btn btn-success" onClick={() => changegamewon()}>ยืนยันการบันทึกคะแนน</button>
+            </div>
+            </>
         )}
       </div>
     ) : (
