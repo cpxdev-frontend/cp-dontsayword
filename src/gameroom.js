@@ -67,7 +67,7 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRo
         if (startstate == true && secondsLeft > 0) {
             startsess = new Shake({
                 threshold: 800, // optional shake strength threshold
-                timeout: 1000 // optional, determines the frequency of event generation
+                timeout: 2000 // optional, determines the frequency of event generation
             });
             startsess.start();
         }
