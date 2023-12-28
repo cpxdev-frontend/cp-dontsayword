@@ -2,7 +2,7 @@ import React from 'react'
 
 var ready;
 
-const Game = ({round, setRound, setWin, setLose, setPrank, maxRound}) => {
+const Game = ({round, time, setRound, setWin, setLose, setPrank, maxRound}) => {
     const [secondsLeft, setSecondsLeft] = React.useState(500);
     const [prewoningame, setPrewon] = React.useState(false);
     const [word, setWord] = React.useState('');
@@ -60,7 +60,7 @@ console.log(new Date())
             setSecondsLeft(secondsLeft - 1);
             if (secondsLeft === 0) {
                 if (startstate == false) {
-                    setSecondsLeft(300)
+                    setSecondsLeft(time)
                     setStart(true)
                     start()
                 } else {
@@ -77,11 +77,15 @@ console.log(new Date())
 
   const colorprogress = () => {
     if (startstate == true) {
-        if (secondsLeft <= 300 && secondsLeft > 180) {
+        const maxper = (80 / 100) * time
+        const half = (50 / 100) * time
+        const less = (20 / 100) * time
+
+        if (secondsLeft <= time && secondsLeft > maxper) {
             return 'bg-primary'
-        } else if (secondsLeft <= 180 && secondsLeft > 120) {
+        } else if (secondsLeft <= maxper && secondsLeft > half) {
             return 'bg-success'
-        } else if (secondsLeft <= 120 && secondsLeft > 15) {
+        } else if (secondsLeft <= half && secondsLeft > less) {
             return 'bg-warning'
         } else {
             return 'bg-danger'
@@ -98,7 +102,7 @@ console.log(new Date())
       <div classname="card-body d-flex justify-content-center">
         <h2 classname="card-title">{startstate ? 'คำที่ได้: ' + word : 'กดเพื่อเริ่มเกม'}</h2>
         <div class="progress mb-3"style={{height: '3px'}}>
-          <div class={"progress-bar " + colorprogress()} role="progressbar" style={{width: ((secondsLeft / (startstate == true ? 300 : 5)) * 100) +'%'}}></div>
+          <div class={"progress-bar " + colorprogress()} role="progressbar" style={{width: ((secondsLeft / (startstate == true ? time : 5)) * 100) +'%'}}></div>
         </div>
         {
             startstate == false && secondsLeft > 5 && (
@@ -108,7 +112,7 @@ console.log(new Date())
         {startstate == false && secondsLeft > 5 ? (
             <></>
         ) : (
-            <h4 style={{color: startstate && secondsLeft <= 20 ? 'red' : ''}}>{startstate == true ? 'เหลือเวลาอีก' : 'เกมจะเริ่มใน'} {secondsLeft} วินาที {startstate == false && '(คำจะปรากฎด้านบน)'}</h4>
+            <h4 style={{color: startstate && secondsLeft <= (20 / 100) * time ? 'red' : ''}}>{startstate == true ? 'เหลือเวลาอีก' : 'เกมจะเริ่มใน'} {secondsLeft} วินาที {startstate == false && '(คำจะปรากฎด้านบน)'}</h4>
         )}
         {startstate == true && prewoningame == false && secondsLeft < 295 && (
               <div class="btn-group" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>

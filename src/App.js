@@ -5,10 +5,13 @@ import GameRoom from './gameroom'
 
 function App() {
   const [Round, setRound] = useState(6)
+  const [time, setTime] = useState(300)
+
   const [step, setStep] = useState(0)
   const [won, setWon] = useState(0)
   const [prank, setPrank] = useState(0)
   const [lose, setLose] = useState(0)
+
 
 if (step == 0) {
   return (
@@ -33,6 +36,10 @@ if (step == 0) {
         <div class="form-group mt-5">
                     <label for="exampleInputEmail1">หมายเหตุ: ในรูปแบบเกมปกติจะเล่น 6 รอบ โดยคุณสามารถปรับจำนวนรอบได้ตามความเหมาะสม (อย่าลืมปรึกษาเพื่อนก่อนเล่นด้วยนะ)</label>
                     <input type="number" class="form-control" onKeyUp={(e) => setRound(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 6)} defaultValue={Round} />
+                </div>
+                <div class="form-group mt-1">
+                    <label for="exampleInputEmail2">หมายเหตุ: ในรูปแบบเกมปกติจะเล่นรอบละ 5 นาที (300 วินาที) โดยคุณสามารถปรับระยะเวลาได้ตามความเหมาะสม (อย่าลืมปรึกษาเพื่อนก่อนเล่นด้วยนะ)</label>
+                    <input type="number" class="form-control" onKeyUp={(e) => setTime(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 300)} defaultValue={time} />
                 </div>
         <button type="button" onClick={() => setStep(1)} class="mt-3 btn btn-outline-success">เริ่มเกม!</button>
       </div>
@@ -76,7 +83,7 @@ if (step == null) {
         </div>
         </form>
     </nav>
-    <GameRoom key={step} maxRound={Round} round={step} setRound={(v) => setStep(v)} setWin={(v) => setWon(won + v)} setLose={(v) => setLose(lose + v)} setPrank={(v) => setPrank(prank + v)} />
+    <GameRoom key={step} time={time} maxRound={Round} round={step} setRound={(v) => setStep(v)} setWin={(v) => setWon(won + v)} setLose={(v) => setLose(lose + v)} setPrank={(v) => setPrank(prank + v)} />
     </>
   );
 }
