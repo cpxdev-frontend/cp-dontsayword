@@ -127,9 +127,15 @@ console.log(new Date())
                 <p>หากในรอบนี้เหลือผู้เล่นคนนี้คนเดียว ให้กดปุ่ม "คลิกเมื่อคุณชนะ" หรือให้คนที่ถือจอนี้อยู่เขย่ามือถือเพื่อหยุดเวลาและทายคำที่อยู่ด้านบนเพื่อรับคะแนนพิเศษ (หากทายถูกได้ 2 คะแนน ทายผิดจะได้รับ 1 คะแนน)</p>
             )
         }
+        {
+            prewoningame ==false ? (
         <div class="progress mb-3"style={{height: '3px'}}>
           <div class={"progress-bar " + colorprogress()} role="progressbar" style={{width: ((secondsLeft / (startstate == true ? time : 5)) * 100) +'%'}}></div>
         </div>
+            ) : (
+                <p>ผู้เล่นคนนี้หยุดเวลาแล้ว! หากผู้เล่นคนนี้ทายคำด้านบนได้ จะได้ 2 คะแนน ทายผิดได้ 1 คะแนน</p>
+            )
+        }
         {
             startstate == false && secondsLeft > 5 && (
                 <button type="button" disabled={word == ''} onClick={()=>setSecondsLeft(5)} className="btn btn-lg btn-success">เริ่มเกมรอบที่ {round}</button>
