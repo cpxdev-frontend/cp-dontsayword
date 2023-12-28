@@ -57,6 +57,7 @@ console.log(new Date())
     window.addEventListener('shake', shakeEventDidOccur, false);
 
     function shakeEventDidOccur () {
+        navigator.vibrate(100);
         window.removeEventListener('shake', shakeEventDidOccur, false);
         setPrewon(true)
         setScore(2)
@@ -78,10 +79,12 @@ console.log(new Date())
             }
             if (secondsLeft === 0) {
                 if (startstate == false) {
+                    navigator.vibrate([80,80]);
                     setSecondsLeft(time)
                     setStart(true)
                     start()
                 } else {
+                    navigator.vibrate(100);
                     setStart(null)
                     setWon(true)
                     setHold(5000000000000);
