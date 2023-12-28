@@ -70,12 +70,10 @@ console.log(new Date())
             setSecondsLeft(500)
         } else {
             setSecondsLeft(secondsLeft - 1);
-            if (time == secondsLeft && startstate == true) {
-                // shake = new Shake();
-                // shake.start();
-            }
             if (secondsLeft === 0) {
                 if (startstate == false) {
+                    shake = new Shake();
+                    shake.start();
                     navigator.vibrate([10,10, 10]);
                     setSecondsLeft(time)
                     setStart(true)
