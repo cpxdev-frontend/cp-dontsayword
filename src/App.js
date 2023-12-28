@@ -8,9 +8,11 @@ function App() {
   const [time, setTime] = useState(300)
 
   const [step, setStep] = useState(0)
+
   const [won, setWon] = useState(0)
   const [prank, setPrank] = useState(0)
   const [lose, setLose] = useState(0)
+  const [score, setScore] = useState(0)
 
 
 if (step == 0) {
@@ -41,7 +43,7 @@ if (step == 0) {
                     <label for="exampleInputEmail2">หมายเหตุ: ในรูปแบบเกมปกติจะเล่นรอบละ 5 นาที (300 วินาที) โดยคุณสามารถปรับระยะเวลาได้ตามความเหมาะสม (อย่าลืมปรึกษาเพื่อนก่อนเล่นด้วยนะ)</label>
                     <input type="number" class="form-control" onKeyUp={(e) => setTime(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 300)} defaultValue={time} />
                 </div>
-        <button type="button" onClick={() => setStep(1)} class="mt-3 btn btn-outline-success">เริ่มเกม!</button>
+        <button type="button" onClick={() => setStep(1)} class="mt-3 btn btn-lg btn-outline-success">เริ่มเกม!</button>
       </div>
   </div>
     </div>
@@ -52,21 +54,22 @@ if (step == null) {
     <div className='container pt-5 mb-3'>
       <div classname="card">
       <div classname="card-body">
-        <h5 classname="card-title">เกมคำต้องห้าม</h5>
-        <h6 classname="card-subtitle mb-2 text-muted">Designed by เทพลีลา</h6>
+        <h2 classname="card-title">เกมคำต้องห้าม</h2>
+        <h6 classname="card-subtitle mb-2 text-muted">Designed by เทพลีลา Developed by CPXDev</h6>
         <ul class="list-group mt-5">
           <li class="list-group-item active" aria-current="true">สรุปคะแนน</li>
           <li class="list-group-item">คุณชนะไปแล้ว {won} รอบ</li>
           <li class="list-group-item">คุณสามารถแกงเพื่อนให้แพ้ได้ {prank} ครั้ง</li>
           <li class="list-group-item">คุณแพ้ไปแล้ว {lose} รอบ</li>
-          <li class="list-group-item bg-success text-light h5">คะแนนที่คุณทำได้ {(won * 2) + prank} คะแนน</li>
+          <li class="list-group-item bg-success text-light h5">คะแนนที่คุณทำได้ {score + prank} คะแนน</li>
         </ul>
         <button type="button" onClick={() => {
           setStep(0)
           setWon(0)
           setPrank(0)
           setLose(0)
-        }} class="mt-3 btn btn-outline-info">เริ่มเกมใหม่</button>
+          setScore(0)
+        }} class="mt-3 btn btn-lg btn-outline-info">เริ่มเกมใหม่</button>
       </div>
   </div>
     </div>
@@ -83,7 +86,7 @@ if (step == null) {
         </div>
         </form>
     </nav>
-    <GameRoom key={step} time={time} maxRound={Round} round={step} setRound={(v) => setStep(v)} setWin={(v) => setWon(won + v)} setLose={(v) => setLose(lose + v)} setPrank={(v) => setPrank(prank + v)} />
+    <GameRoom key={step} time={time} maxRound={Round} round={step}  setRound={(v) => setStep(v)} setWin={(v) => setWon(won + v)} setLose={(v) => setLose(lose + v)} setPrank={(v) => setPrank(prank + v)} setScore={(v) => setScore(score + v)} />
     </>
   );
 }

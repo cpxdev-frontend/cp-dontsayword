@@ -1,8 +1,9 @@
 import React from 'react'
+import Shake from 'shake.js'
 
-var ready;
+var startsess;
 
-const Game = ({round, time, setRound, setWin, setLose, setPrank, maxRound}) => {
+const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRound}) => {
     const [secondsLeft, setSecondsLeft] = React.useState(500);
     const [prewoningame, setPrewon] = React.useState(false);
     const [word, setWord] = React.useState('');
@@ -31,8 +32,17 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, maxRound}) => {
         setScreen([window.innerWidth, window.innerHeight])
     }, [screen])
 
+    window.addEventListener('shake', shakeEventDidOccur, false);
+
+    function shakeEventDidOccur () {
+        startsess.stop();
+        setPrewon(true)
+        setScore(2)
+        setHold(5000000000000);
+    }
+
     const start = () => { 
-console.log(new Date())
+        console.log(new Date())
     }
     const changegamewon = () => {
         setPrank(prankcurrent)
@@ -53,7 +63,14 @@ console.log(new Date())
     }
 
   React.useEffect(() => {
-    ready = setInterval(() => {
+    setInterval(() => {
+        if (startstate == true && secondsLeft > 0) {
+            startsess = new Shake({
+                threshold: 15, // optional shake strength threshold
+                timeout: 1000 // optional, determines the frequency of event generation
+            });
+            startsess.start();
+        }
         if (secondsLeft == 500) {
             setSecondsLeft(500)
         } else {
@@ -71,8 +88,6 @@ console.log(new Date())
             }
         }
     }, readyhold);
-
-    return () => clearInterval(ready);
   }, [secondsLeft]);
 
   const colorprogress = () => {
@@ -106,7 +121,7 @@ console.log(new Date())
         </div>
         {
             startstate == false && secondsLeft > 5 && (
-                <button type="button" disabled={word == ''} onClick={()=>setSecondsLeft(5)} className="btn btn-success">เริ่มเกมรอบที่ {round}</button>
+                <button type="button" disabled={word == ''} onClick={()=>setSecondsLeft(5)} className="btn btn-lg btn-success">เริ่มเกมรอบที่ {round}</button>
             )
         }
         {startstate == false && secondsLeft > 5 ? (
@@ -114,10 +129,11 @@ console.log(new Date())
         ) : (
             <h4 style={{color: startstate && secondsLeft <= (20 / 100) * time ? 'red' : ''}}>{startstate == true ? 'เหลือเวลาอีก' : 'เกมจะเริ่มใน'} {secondsLeft} วินาที {startstate == false && '(คำจะปรากฎด้านบน)'}</h4>
         )}
-        {startstate == true && prewoningame == false && secondsLeft < 295 && (
-              <div class="btn-group" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
+        {startstate == true && prewoningame == false && secondsLeft < (90 / 100) * time && (
+              <div class="btn-group mt-4" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
               <button type="button" class="btn btn-success" onClick={() => {
                 setPrewon(true)
+                setScore(2)
                 setHold(5000000000000);
               }}>คลิกเมื่อคุณชนะ (คุณเป็นผู้เล่นที่เหลือคนสุดท้ายในรอบนี้)</button>
               <button type="button" class="btn btn-danger" onClick={() => {
@@ -134,8 +150,16 @@ console.log(new Date())
                 <label for="exampleInputEmail1">กรอกคะแนนที่คุณได้ในรอบนี้ (ระบุจำนวนเพื่อนที่คุณแกงให้แพ้เกมในรอบนี้สำเร็จเท่านั้น)</label>
                 <input type="number" class="form-control" onKeyUp={(e) => setPrankCurrent(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 0)} defaultValue={prankcurrent} />
             </div>
-            <div class="btn-group" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
-                <button type="button" class="btn btn-success" onClick={() => changegamewon()}>ยืนยันการบันทึกคะแนน</button>
+            <div class="btn-group mt-4" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
+                <button type="button" class="btn btn-success" onClick={() => {
+                    setScore(2)
+                    changegamewon()
+                }}>คุณทายถูก</button>
+                <button type="button" class="btn btn-danger" onClick={() => {
+                    setScore(1)
+                    setWin(1)
+                    changegamelose()
+                }}>คุณทายผิด</button>
             </div>
             </>
         )}
@@ -151,12 +175,16 @@ console.log(new Date())
                 <label for="exampleInputEmail1">กรอกคะแนนที่คุณได้ในรอบนี้ (ระบุจำนวนเพื่อนที่คุณแกงให้แพ้เกมในรอบนี้สำเร็จเท่านั้น)</label>
                 <input type="number" class="form-control" onKeyUp={(e) => setPrankCurrent(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 0)} defaultValue={prankcurrent} />
             </div>
-            <div class="btn-group" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
-                <button type="button" class="btn btn-success" onClick={() => changegamewon()}>ทายได้</button>
+            <div class="btn-group mt-4" role="group" aria-label="Basic example" hidden={screen[0] > screen[1]}>
+                <button type="button" class="btn btn-success" onClick={() => {
+                    setScore(2)
+                    changegamewon()
+                }}>คุณทายถูก</button>
                 <button type="button" class="btn btn-danger" onClick={() => {
-                    setLose(1)
+                    setScore(1)
+                    setWin(1)
                     changegamelose()
-                }}>ทายไม่ได้</button>
+                }}>คุณทายผิด</button>
             </div>
           </div>
         ) : (
