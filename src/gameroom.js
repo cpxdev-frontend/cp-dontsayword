@@ -31,6 +31,24 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRo
 
     React.useEffect(() => {
         setScreen([window.innerWidth, window.innerHeight])
+        // var elem = document.getElementById("root");
+        // if (screen[0] > screen[1]) {
+        //     if (elem.requestFullscreen) {
+        //         elem.requestFullscreen();
+        //       } else if (elem.webkitRequestFullscreen) { /* Safari */
+        //       elem.webkitRequestFullscreen();
+        //       } else if (elem.msRequestFullscreen) { /* IE11 */
+        //       elem.msRequestFullscreen();
+        //       }
+        // } else {
+        //     if (document.exitFullscreen) {
+        //         document.exitFullscreen();
+        //       } else if (document.webkitExitFullscreen) { /* Safari */
+        //         document.webkitExitFullscreen();
+        //       } else if (document.msExitFullscreen) { /* IE11 */
+        //         document.msExitFullscreen();
+        //       }
+        // }
     }, [screen])
 
     const start = () => { 
@@ -145,11 +163,11 @@ console.log(new Date())
         }
         {startstate == true && prewoningame == false && secondsLeft < (90 / 100) * time && (
               <div class="btn-group mt-4" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-success" onClick={() => {
+              <button type="button" className="btn btn-success" onClick={() => {
                 setPrewon(true)
                 setHold(5000000000000);
               }}>คลิกเมื่อคุณชนะ (คุณเป็นผู้เล่นที่เหลือคนสุดท้ายในรอบนี้)</button>
-              <button type="button" class={"btn btn-danger" + (screen[0] > screen[1] ? ' d-none' : '')}onClick={() => {
+              <button type="button" className={"btn btn-danger" + (screen[0] > screen[1] ? ' d-none' : '')} onClick={() => {
                  setStart(null)
                  setHold(5000000000000);
                  setLose(1)
