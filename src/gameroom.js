@@ -1,8 +1,7 @@
 import React from 'react'
-import Shake from 'shake.js'
+import { useLongPress } from 'use-long-press';
 
 var ready;
-var shake;
 
 const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRound}) => {
     const [secondsLeft, setSecondsLeft] = React.useState(500);
@@ -13,6 +12,18 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRo
     const [won, setWon] = React.useState(false);
     const [readyhold, setHold] = React.useState(1000);
     const [prankcurrent, setPrankCurrent] = React.useState(0);
+    
+    const bind = useLongPress(() => {
+        if (startstate == true && secondsLeft > 0) {
+            navigator.vibrate(80);
+            window.removeEventListener('shake', shakeEventDidOccur, false);
+            setPrewon(true)
+            setScore(2)
+            setHold(5000000000000);
+        }
+      }, {
+        threshold: 800
+      });
 
     React.useEffect(() => {
         fetch(encodeURI('https://cpxstatusservice.azurewebsites.net/wordrandom'), {
@@ -120,7 +131,7 @@ console.log(new Date())
     return ( <div className='container'>
  <div classname="card">
     {startstate != null ? (
-      <div classname="card-body d-flex justify-content-center">
+      <div classname="card-body d-flex justify-content-center" {...bind()}>
         <h2 classname="card-title">{startstate ? 'คำที่ได้: ' + word : 'กดเพื่อเริ่มเกม'}</h2>
         {
             startstate && (
