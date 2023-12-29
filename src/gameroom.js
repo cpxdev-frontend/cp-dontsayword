@@ -131,7 +131,7 @@ console.log(new Date())
     return ( <div className='container'>
  <div classname="card">
     {startstate != null ? (
-      <div classname="card-body d-flex justify-content-center" {...bind()}>
+      <div classname="card-body d-flex justify-content-center prevent-select" {...bind()}>
         <h2 classname="card-title">{startstate ? 'คำที่ได้: ' + word : 'กดเพื่อเริ่มเกม'}</h2>
         {
             startstate && (
