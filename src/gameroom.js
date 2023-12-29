@@ -26,7 +26,7 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRo
       });
 
     React.useEffect(() => {
-        fetch(encodeURI('https://cpxstatusservice.azurewebsites.net/wordrandom'), {
+        fetch(encodeURI('https://cpxdevservice.onrender.com/wordrandom'), {
             method: 'post', // or 'PUT'
             })
             .then(response => response.json())
@@ -131,7 +131,9 @@ console.log(new Date())
     return ( <div className='container'>
  <div classname="card">
     {startstate != null ? (
-      <div classname="card-body d-flex justify-content-center prevent-select" {...bind()}>
+      <div classname="card-body d-flex justify-content-center" style={{
+        userSelect: 'none'
+      }} {...bind()}>
         <h2 classname="card-title">{startstate ? 'คำที่ได้: ' + word : 'กดเพื่อเริ่มเกม'}</h2>
         {
             startstate && (
