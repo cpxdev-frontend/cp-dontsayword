@@ -26,7 +26,7 @@ const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRo
       });
 
     React.useEffect(() => {
-        fetch(encodeURI('https://cpxdevservice.onrender.com/wordrandom'), {
+        fetch(encodeURI('https://cpxdevservice.onrender.com/wordrandom/getrandom'), {
             method: 'post', // or 'PUT'
             })
             .then(response => response.json())

@@ -1,9 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import React,{ useState } from 'react';
 import GameRoom from './gameroom'
 
 function App() {
+  const [id, setID] = useState(localStorage.getItem('player'))
+  const [player, setAddPlayer] = useState([])
+
   const [Round, setRound] = useState(6)
   const [time, setTime] = useState(300)
 
@@ -14,6 +17,20 @@ function App() {
   const [lose, setLose] = useState(0)
   const [score, setScore] = useState(0)
 
+  React.useEffect(() => {
+    fetch(encodeURI('https://cpxdevservice.onrender.com/wordrandom/getready' + (id !== null ? '/'+ id: '')), {
+      method: 'post', // or 'PUT'
+      })
+      .then(response => response.json())
+      .then(data => {
+          setID(data.id)
+          localStorage.setItem('player', data.id)
+      })
+      .catch((error) => {
+      console.error('Error:', error);
+      });
+  }, [])
+
 
 if (step == 0) {
   return (
@@ -21,20 +38,29 @@ if (step == 0) {
       <div classname="card">
       <div classname="card-body">
         <h2 classname="card-title">เกมคำต้องห้าม</h2>
-        <h6 classname="card-subtitle mb-2 text-muted">Designed by เทพลีลา Developed by CPXDev</h6>
+        <h6 classname="card-subtitle text-muted">Designed by เทพลีลา Developed by CPXDev</h6>
+        <h6 classname="card-subtitle mb-2 text-muted">ไอดีของคุณ: {id != null ? id : 'กำลังสร้างไอดีผู้เล่น'}</h6>
         <hr/>
         <p classname="card-subtitle mb-2">เกมสำหรับตั้งแต่ 2 คนขึ้นไป</p>
         <ul class="list-group mt-3">
           <li class="list-group-item active" aria-current="true">กติไก่ เอ๊ย! กติกา</li>
-          <li class="list-group-item">1. การเล่นเกมจะแบ่งเป็น {Round} รอบ รอบละ 5 นาที</li>
+          <li class="list-group-item">1. การเล่นเกมจะแบ่งเป็น {Round} รอบ รอบละ {time} วินาที</li>
           <li class="list-group-item">2. ในแต่ละรอบระบบจะสุ่มคำขึ้นมา 1 คำ โดยระบบสุ่มคำแล้วจะยังไม่แสดงผลจนกว่าจะกดเริ่มเกม</li>
           <li class="list-group-item">3. หากกดเริ่มเกมในแต่ละรอบแล้วจะนับถอยหลัง 5 วินาทีเพื่อให้คุณหันจอไปยังฝ่ายตรงข้าม หลังจากนับถอยหลังครบแล้ว คำจะแสดงผล พร้อมกับการจับเวลา 5 นาที ถือว่าเป็นการเริ่มเกม</li>
           <li class="list-group-item">4. โดยที่คุณนั้นต้อง <b>ห้าม</b> พูดคำที่ปรากฎบนจอที่คุณถืออยู่ หากคุณเผลอพูดจะถือว่าคุณ<b>แพ้</b>ในรอบนั้นทันที</li>
           <li class="list-group-item">5. ในขณะเดียวกันคุณต้องทำให้ฝ่ายตรงข้ามพูดคำที่ปรากฎบนจอที่เขาถืออยู่ให้ได้ คุณถึงได้คะแนน (คนที่แพ้ในรอบนั้นก็สามารถเล่นได้เช่นกัน)</li>
-          <li class="list-group-item">6. หากภายใน 5 นาทีสามารถเหลือผู้รอดคนเดียว คนนั้นจะเป็นผู้ชนะในรอบนั้นและได้คะแนนเพิ่ม</li>
-          <li class="list-group-item">7. ในกรณีที่หมดเวลาการแข่งขันในรอบนั้น (ครบ 5 นาที) ผู้เล่นที่เหลือจะต้องทายคำที่ตัวเองถืออยู่ให้ถูก ถึงจะได้คะแนน</li>
+          <li class="list-group-item">6. หากภายใน {time} วินาทีสามารถเหลือผู้รอดคนเดียว คนนั้นจะเป็นผู้ชนะในรอบนั้นและได้คะแนนเพิ่ม</li>
+          <li class="list-group-item">7. ในกรณีที่หมดเวลาการแข่งขันในรอบนั้น (ครบ {time} วินาที) ผู้เล่นที่เหลือจะต้องทายคำที่ตัวเองถืออยู่ให้ถูก ถึงจะได้คะแนน</li>
           <li class="list-group-item">8. การแข่งขันจะเริ่มไปเรื่อยๆจนครบ {Round} รอบ หลังจากนั้นระบบจะแสดงคะแนนที่คุณบันทึกไว้ ใครได้คะแนนมากที่สุดเป็นผู้ชนะในเกมนั้น</li>
         </ul>
+        <div className='card'>
+            <div className='card-body'>
+            <div class="form-group mt-5">
+                    <label for="add">กรอกไอดีผู้เล่นของคนอื่น</label>
+                    <input type="text" class="form-control" />
+                </div>
+            </div>
+        </div>
         <div class="form-group mt-5">
                     <label for="exampleInputEmail1">หมายเหตุ: ในรูปแบบเกมปกติจะเล่น 6 รอบ โดยคุณสามารถปรับจำนวนรอบได้ตามความเหมาะสม (อย่าลืมปรึกษาเพื่อนก่อนเล่นด้วยนะ)</label>
                     <input type="number" class="form-control" onKeyUp={(e) => setRound(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 6)} defaultValue={Round} />
@@ -64,11 +90,13 @@ if (step == null) {
           <li class="list-group-item bg-success text-light h5">คะแนนที่คุณทำได้ {score + prank} คะแนน</li>
         </ul>
         <button type="button" onClick={() => {
-          setStep(0)
-          setWon(0)
-          setPrank(0)
-          setLose(0)
-          setScore(0)
+          if (id != null) {
+            setStep(0)
+            setWon(0)
+            setPrank(0)
+            setLose(0)
+            setScore(0)
+          }
         }} class="mt-3 btn btn-lg btn-outline-info">เริ่มเกมใหม่</button>
       </div>
   </div>
