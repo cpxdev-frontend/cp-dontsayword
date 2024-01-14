@@ -86,9 +86,9 @@ if (step == 0) {
             <div class="form-group mt-5">
                     <label for="add">กรอกไอดีผู้เล่นของคนอื่น</label>
                     <input type="text" onKeyUp={(e) => {
-                        if(e.key === 'Enter'){
+                        if(e.which === 32){
                           if (e.target.value != "" && player.filter(item => item == e.target.value).length == 0) {
-                            setAddPlayer([...player, e.target.value])
+                            setAddPlayer([...player, e.target.value.replace(' ', '')])
                             e.target.value = ''
                           } else {
                             alert('Please add your friend player ID.')
