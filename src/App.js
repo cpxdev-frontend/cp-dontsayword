@@ -9,6 +9,7 @@ function App() {
   const [id, setID] = useState(null)
   const [loadState, setLoad] = useState(true)
   const [player, setAddPlayer] = useState([])
+  const [cplay, setCplay] = useState('')
 
   const [Round, setRound] = useState(6)
   const [time, setTime] = useState(300)
@@ -81,20 +82,21 @@ if (step == 0) {
           <li class="list-group-item">7. ในกรณีที่หมดเวลาการแข่งขันในรอบนั้น (ครบ {time} วินาที) ผู้เล่นที่เหลือจะต้องทายคำที่ตัวเองถืออยู่ให้ถูก ถึงจะได้คะแนน</li>
           <li class="list-group-item">8. การแข่งขันจะเริ่มไปเรื่อยๆจนครบ {Round} รอบ หลังจากนั้นระบบจะแสดงคะแนนที่คุณบันทึกไว้ ใครได้คะแนนมากที่สุดเป็นผู้ชนะในเกมนั้น</li>
         </ul>
-        <div className='card'>
+        <div className='card mb-5'>
             <div className='card-body'>
-            <div class="form-group mt-5">
+            <div class="form-group">
                     <label for="add">กรอกไอดีผู้เล่นของคนอื่น</label>
                     <input type="text" onKeyUp={(e) => {
-                        if(e.which === 32){
-                          if (e.target.value != "" && player.filter(item => item == e.target.value).length == 0) {
-                            setAddPlayer([...player, e.target.value.replace(' ', '')])
-                            e.target.value = ''
-                          } else {
-                            alert('Please add your friend player ID.')
-                          }
-                        }
+                        setCplay(e.target.value.replace(' ', ''))
                     }} class="form-control" />
+                    <button onClick={() => {
+                        if (cplay != "" && player.filter(item => item == cplay).length == 0) {
+                          setAddPlayer([...player, cplay.replace(' ', '')])
+                          setCplay('')
+                        } else {
+                          alert('Please add your friend player ID.')
+                        }
+                    }} class="btn btn-lg btn-outline-success">Add</button>
                 </div>
             </div>
             <ul className="list-group">
@@ -113,7 +115,7 @@ if (step == 0) {
                     <label for="exampleInputEmail2">หมายเหตุ: ในรูปแบบเกมปกติจะเล่นรอบละ 5 นาที (300 วินาที) โดยคุณสามารถปรับระยะเวลาได้ตามความเหมาะสม (อย่าลืมปรึกษาเพื่อนก่อนเล่นด้วยนะ)</label>
                     <input type="number" class="form-control" onKeyUp={(e) => setTime(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 300)} defaultValue={time} />
                 </div>
-        <button type="button" onClick={() => LoadReady()} class="mt-3 btn btn-lg btn-outline-success" disabled={loadState}>เริ่มเกม!</button>
+        <button type="button" onClick={() => LoadReady()} class="mt-3 btn btn-lg btn-success" disabled={loadState}>เริ่มเกม!</button>
       </div>
   </div>
     </div>
