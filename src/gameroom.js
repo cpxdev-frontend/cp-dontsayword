@@ -3,7 +3,7 @@ import { useLongPress } from 'use-long-press';
 
 var ready;
 
-const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRound}) => {
+const Game = ({round, time, setRound, setWin, setLose, setPrank, setScore, maxRound, setLoad, loadState}) => {
     const [secondsLeft, setSecondsLeft] = React.useState(500);
     const [prewoningame, setPrewon] = React.useState(false);
     const [word, setWord] = React.useState('');

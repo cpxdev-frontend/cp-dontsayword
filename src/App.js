@@ -3,8 +3,11 @@ import './App.css';
 import React,{ useState } from 'react';
 import GameRoom from './gameroom'
 
+var loadstart;
+
 function App() {
-  const [id, setID] = useState(localStorage.getItem('player'))
+  const [id, setID] = useState(null)
+  const [loadState, setLoad] = useState(true)
   const [player, setAddPlayer] = useState([])
 
   const [Round, setRound] = useState(6)
@@ -18,18 +21,43 @@ function App() {
   const [score, setScore] = useState(0)
 
   React.useEffect(() => {
-    fetch(encodeURI('https://cpxdevservice.onrender.com/wordrandom/getready' + (id !== null ? '/'+ id: '')), {
+    fetch(encodeURI('https://cpxdevservice.onrender.com/wordrandom/getready' + (localStorage.getItem('player') !== null ? '/'+ localStorage.getItem('player'): '')), {
       method: 'post', // or 'PUT'
       })
       .then(response => response.json())
       .then(data => {
           setID(data.id)
           localStorage.setItem('player', data.id)
+          setLoad(false)
       })
       .catch((error) => {
       console.error('Error:', error);
       });
   }, [])
+
+  const LoadReady = () => {
+    setLoad(true)
+    loadstart = setInterval(() => {
+      fetch(encodeURI('https://cpxdevservice.onrender.com/wordrandom/checkreadygame' + (id !== null ? '/'+ id: '')), {
+        method: 'post', // or 'PUT'
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(player),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.st == true) {
+              clearInterval(loadstart)
+              setLoad(false)
+              setStep(1)
+            }
+        })
+        .catch((error) => {
+        console.error('Error:', error);
+        });
+      }, 500)
+  }
 
 
 if (step == 0) {
@@ -57,9 +85,25 @@ if (step == 0) {
             <div className='card-body'>
             <div class="form-group mt-5">
                     <label for="add">กรอกไอดีผู้เล่นของคนอื่น</label>
-                    <input type="text" class="form-control" />
+                    <input type="text" onKeyUp={(e) => {
+                        if(e.key === 'Enter'){
+                          if (e.target.value != "" && player.filter(item => item == e.target.value).length == 0) {
+                            setAddPlayer([...player, e.target.value])
+                            e.target.value = ''
+                          } else {
+                            alert('Please add your friend player ID.')
+                          }
+                        }
+                    }} class="form-control" />
                 </div>
             </div>
+            <ul className="list-group">
+              {
+                player.map((playerd) => (
+                  <li className="list-group-item" onDoubleClick={() => setAddPlayer(player.filter(item => item !== playerd))}>{playerd} (ดับเบิ้ลคลิกที่นี่เพื่อลบไอดีนี้)</li>
+                ))
+              }
+            </ul>
         </div>
         <div class="form-group mt-5">
                     <label for="exampleInputEmail1">หมายเหตุ: ในรูปแบบเกมปกติจะเล่น 6 รอบ โดยคุณสามารถปรับจำนวนรอบได้ตามความเหมาะสม (อย่าลืมปรึกษาเพื่อนก่อนเล่นด้วยนะ)</label>
@@ -69,7 +113,7 @@ if (step == 0) {
                     <label for="exampleInputEmail2">หมายเหตุ: ในรูปแบบเกมปกติจะเล่นรอบละ 5 นาที (300 วินาที) โดยคุณสามารถปรับระยะเวลาได้ตามความเหมาะสม (อย่าลืมปรึกษาเพื่อนก่อนเล่นด้วยนะ)</label>
                     <input type="number" class="form-control" onKeyUp={(e) => setTime(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 300)} defaultValue={time} />
                 </div>
-        <button type="button" onClick={() => setStep(1)} class="mt-3 btn btn-lg btn-outline-success">เริ่มเกม!</button>
+        <button type="button" onClick={() => LoadReady()} class="mt-3 btn btn-lg btn-outline-success" disabled={loadState}>เริ่มเกม!</button>
       </div>
   </div>
     </div>
@@ -97,7 +141,7 @@ if (step == null) {
             setLose(0)
             setScore(0)
           }
-        }} class="mt-3 btn btn-lg btn-outline-info">เริ่มเกมใหม่</button>
+        }} class="mt-3 btn btn-lg btn-outline-info" disabled={loadState}>เริ่มเกมใหม่</button>
       </div>
   </div>
     </div>
@@ -114,7 +158,7 @@ if (step == null) {
         </div>
         </form>
     </nav>
-    <GameRoom key={step} time={time} maxRound={Round} round={step}  setRound={(v) => setStep(v)} setWin={(v) => setWon(won + v)} setLose={(v) => setLose(lose + v)} setPrank={(v) => setPrank(prank + v)} setScore={(v) => setScore(score + v)} />
+    <GameRoom key={step} time={time} loadState={loadState} setLoad={(v)=> setLoad(v)} maxRound={Round} round={step}  setRound={(v) => setStep(v)} setWin={(v) => setWon(won + v)} setLose={(v) => setLose(lose + v)} setPrank={(v) => setPrank(prank + v)} setScore={(v) => setScore(score + v)} />
     </>
   );
 }
