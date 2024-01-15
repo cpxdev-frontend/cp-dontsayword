@@ -22,7 +22,7 @@ function App() {
   const [score, setScore] = useState(0)
 
   React.useEffect(() => {
-    fetch(encodeURI('https://cpxdevgame.azurewebsites.net/dsw/getready' + (localStorage.getItem('player') !== null ? '/'+ localStorage.getItem('player'): '')), {
+    fetch(encodeURI('https://cpxdevgame.azurewebsites.net/v1/dsw/getready' + (localStorage.getItem('player') !== null ? '/'+ localStorage.getItem('player'): '')), {
       method: 'post', // or 'PUT'
       })
       .then(response => response.json())
@@ -39,7 +39,7 @@ function App() {
   const LoadReady = () => {
     setLoad(true)
     loadstart = setInterval(() => {
-      fetch(encodeURI('https://cpxdevgame.azurewebsites.net/dsw/checkreadygame' + (id !== null ? '/'+ id: '')), {
+      fetch(encodeURI('https://cpxdevgame.azurewebsites.net/v1/dsw/checkreadygame' + (id !== null ? '/'+ id: '')), {
         method: 'post', // or 'PUT'
         headers: {
           "Content-Type": "application/json"
