@@ -38,32 +38,35 @@ function App() {
 
   const LoadReady = () => {
     if (step == 0) {
-    setLoad(true)
     loadstart = setInterval(() => {
-      fetch(encodeURI('https://cpxdevgame.azurewebsites.net/v1/dsw/checkreadygame' + (id !== null ? '/'+ id: '')), {
-        method: 'post', // or 'PUT'
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(player),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.st == true) {
-              clearInterval(loadstart)
-              setLoad(false)
-              setStep(1)
-            }
-        })
-        .catch((error) => {
-        console.error('Error:', error);
-        });
-      }, 600)
+      if (loadState == false) {
+        setLoad(true)
+        fetch(encodeURI('https://cpxdevgame.azurewebsites.net/v1/dsw/checkreadygame' + (id !== null ? '/'+ id: '')), {
+          method: 'post', // or 'PUT'
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(player),
+          })
+          .then(response => response.json())
+          .then(data => {
+            setLoad(false)
+              if (data.st == true) {
+                clearInterval(loadstart)
+                setStep(1)
+              }
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+          });
+      }
+      }, 800)
     }
   }
 
   const cancel = () => {
     if (step == 0) {
+      setLoad(true)
       fetch(encodeURI('https://cpxdevgame.azurewebsites.net/v1/dsw/finishgame' + (id !== null ? '/'+ id: '')), {
         method: 'post', // or 'PUT'
         headers: {
@@ -75,6 +78,7 @@ function App() {
             if (data.st == true) {
               clearInterval(loadstart)
               setLoad(false)
+              setStep(0)
             }
         })
         .catch((error) => {
