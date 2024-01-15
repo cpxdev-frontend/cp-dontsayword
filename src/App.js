@@ -37,6 +37,7 @@ function App() {
   }, [])
 
   const LoadReady = () => {
+    if (step == 0) {
     setLoad(true)
     loadstart = setInterval(() => {
       fetch(encodeURI('https://cpxdevgame.azurewebsites.net/v1/dsw/checkreadygame' + (id !== null ? '/'+ id: '')), {
@@ -57,7 +58,29 @@ function App() {
         .catch((error) => {
         console.error('Error:', error);
         });
-      }, 1000)
+      }, 600)
+    }
+  }
+
+  const cancel = () => {
+    if (step == 0) {
+      fetch(encodeURI('https://cpxdevgame.azurewebsites.net/v1/dsw/finishgame' + (id !== null ? '/'+ id: '')), {
+        method: 'post', // or 'PUT'
+        headers: {
+          "Content-Type": "application/json"
+        }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.st == true) {
+              clearInterval(loadstart)
+              setLoad(false)
+            }
+        })
+        .catch((error) => {
+        console.error('Error:', error);
+        });
+    }
   }
 
 
@@ -116,6 +139,9 @@ if (step == 0) {
                     <input type="number" class="form-control" onKeyUp={(e) => setTime(e.target.value != '' && parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 300)} defaultValue={time} />
                 </div>
         <button type="button" onClick={() => LoadReady()} class="mt-3 btn btn-lg btn-success" disabled={loadState}>เริ่มเกม!</button>
+        {loadState && (
+           <button type="button" onClick={() => cancel()} class="mt-3 btn btn-lg btn-info">ยกเลิก</button>
+        )}
       </div>
   </div>
     </div>
